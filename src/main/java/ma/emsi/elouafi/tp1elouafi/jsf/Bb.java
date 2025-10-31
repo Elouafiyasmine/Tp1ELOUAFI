@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import ma.emsi.elouafi.tp1elouafi.llm.JsonUtil;
+import ma.emsi.elouafi.tp1elouafi.llm.LlmInteraction;
+
+
 /**
  * Backing bean pour la page JSF index.xhtml.
  * Portée view pour conserver l'état de la conversation qui dure pendant plusieurs requêtes HTTP.
@@ -58,9 +62,16 @@ public class Bb implements Serializable {
     @Inject
     private FacesContext facesContext;
 
+    @Inject
+    private JsonUtil jsonUtil;
+
+
     /**
      * Obligatoire pour un bean CDI (classe gérée par CDI), s'il y a un autre constructeur.
      */
+    private String texteRequeteJson;   // JSON envoyé
+    private String texteReponseJson;   // JSON retourné
+    private boolean debug = true;
     public Bb() {
     }
 
@@ -113,28 +124,60 @@ public class Bb implements Serializable {
      *
      * @return null pour rester sur la même page.
      */
+    public String getTexteRequeteJson() { return texteRequeteJson; }
+    public void setTexteRequeteJson(String texteRequeteJson) { this.texteRequeteJson = texteRequeteJson; }
+
+    public String getTexteReponseJson() { return texteReponseJson; }
+    public void setTexteReponseJson(String texteReponseJson) { this.texteReponseJson = texteReponseJson; }
+
+    public boolean isDebug() { return debug; }
+    public void setDebug(boolean debug) { this.debug = debug; }
     public String envoyer() {
+        // 1️⃣ Vérification du texte de la question
         if (question == null || question.isBlank()) {
-            // Erreur ! Le formulaire va être réaffiché en réponse à la requête POST, avec un message d'erreur.
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Texte question vide", "Il manque le texte de la question");
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Texte question vide",
+                    "Il manque le texte de la question"
+            );
             facesContext.addMessage(null, message);
             return null;
         }
-        // Entourer la réponse avec "||".
-        this.reponse = "||";
-        // Si la conversation n'a pas encore commencé, ajouter le rôle système au début de la réponse
-        if (this.conversation.isEmpty()) {
-            // Ajouter le rôle système au début de la réponse
-            this.reponse += roleSysteme.toUpperCase(Locale.FRENCH) + "\n";
-            // Invalide le bouton pour changer le rôle système
-            this.roleSystemeChangeable = false;
+
+        try {
+            // 2️⃣ Si c’est le tout début de la conversation, envoyer aussi le rôle système
+            if (this.conversation.isEmpty()) {
+                // On fige le rôle système (plus modifiable)
+                this.roleSystemeChangeable = false;
+
+                // On transmet le rôle système à JsonUtil
+                jsonUtil.setRoleSysteme(roleSysteme);
+            }
+
+            // 3️⃣ Envoi de la requête au serveur LLM via JsonUtil
+            LlmInteraction interaction = jsonUtil.envoyerRequete(question);
+
+            // 4️⃣ Mise à jour des champs pour affichage et debug
+            this.reponse = interaction.reponseExtraite();
+            this.texteRequeteJson = interaction.questionJson();
+            this.texteReponseJson = interaction.reponseJson();
+
+            // 5️⃣ Mise à jour de l’historique de la conversation
+            afficherConversation();
+
+        } catch (Exception e) {
+            // 6️⃣ Gestion d’erreur : problème d’appel à l’API
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Problème de connexion avec l'API du LLM",
+                    "Problème de connexion avec l'API du LLM : " + e.getMessage()
+            );
+            facesContext.addMessage(null, message);
         }
-        this.reponse += question.toLowerCase(Locale.FRENCH) + "||";
-        // La conversation contient l'historique des questions-réponses depuis le début.
-        afficherConversation();
-        return null;
+
+        return null; // reste sur la même page
     }
+
 
     /**
      * Pour un nouveau chat.
@@ -182,11 +225,24 @@ public class Bb implements Serializable {
                     are you tell them the average price of a meal.
                     """;
             this.listeRolesSysteme.add(new SelectItem(role, "Guide touristique"));
+            role = """
+    You are a confident life coach who motivates the user with energy, honesty, and a touch of humor.
+    You speak directly, like a supportive mentor who believes in the user's potential.
+    Use short, impactful sentences. Give practical advice and boost confidence in every answer.
+    """;
+            this.listeRolesSysteme.add(new SelectItem(role, "Coach de confiance"));
         }
 
         return this.listeRolesSysteme;
     }
+    /**
+     * Méthode utilitaire pour entourer une chaîne de guillemets et échapper les caractères spéciaux.
+     * Évite les erreurs de format JSON.
+     */
+    private static String quote(String text) {
+        if (text == null) return "null";
+        return "\"" + text.replace("\"", "\\\"") + "\"";
+    }
 
 }
-
 
