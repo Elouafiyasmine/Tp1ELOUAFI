@@ -9,16 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f8ac128-d86a-4d48-a68d-61003bca74f8" name="Changes" comment="commit du page JSF">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/llm/JsonUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/llm/JsonUtilPourGemini.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/llm/LlmClientPourGemini.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/llm/LlmInteraction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/llm/RequeteException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/jsf/Bb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ma/emsi/elouafi/tp1elouafi/jsf/Bb.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.xhtml" afterDir="false" />
-    </list>
+    <list default="true" id="5f8ac128-d86a-4d48-a68d-61003bca74f8" name="Changes" comment="commit du Tp 1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +110,7 @@
       <option name="presentableId" value="Default" />
       <updated>1761727750953</updated>
       <workItem from="1761727753692" duration="10004000" />
-      <workItem from="1761817741485" duration="1089000" />
+      <workItem from="1761817741485" duration="1904000" />
     </task>
     <task id="LOCAL-00001" summary="La construction du projet">
       <option name="closed" value="true" />
@@ -145,16 +136,36 @@
       <option name="project" value="LOCAL" />
       <updated>1761731143922</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="commit du Tp 1">
+      <option name="closed" value="true" />
+      <created>1761898318591</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1761898318591</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="La construction du projet" />
     <MESSAGE value="commit du page JSF" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit du page JSF" />
+    <MESSAGE value="commit du Tp 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit du Tp 1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
